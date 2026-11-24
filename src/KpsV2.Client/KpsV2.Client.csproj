@@ -17,6 +17,7 @@
     <Authors>colakkonur</Authors>
     <Description>Sağlık Bakanlığı Kimlik Paylaşım Sistemi (KPS v2) için resmî olmayan .NET istemcisi (Bakanlıkla bağlantısı yoktur; kullanmak için kendi KPS hesabınız gerekir). Kps servisinin 16 ve Parametre servisinin 2 metodu, WSDL'den üretilmiş tipli istek/cevaplarla. STS token önbelleği, geçici hatalarda yeniden deneme, hata sınıflandırması ve ASP.NET Core DI desteği içerir.</Description>
     <PackageTags>kps;kpsv2;saglik;kimlik;mernis;soap</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/colakkonur/kpsv2-client</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/colakkonur/kpsv2-client</PackageProjectUrl>
