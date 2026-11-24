@@ -1,10 +1,8 @@
 # KPS v2 Metot Referansı
 
-Kaynak: kpsv2test.saglik.gov.tr **Servis Bilgileri** sayfası (`/details/getAll`) ve servis WSDL'leri. Her metodun C# karşılığı `IKpsClient` üzerindedir; dönüş tipleri `KpsV2.Contracts` namespace'indeki WSDL tipleridir ve tüm alanları içerir.
+Her metodun argümanları ve döndürdüğü alanlar. Kaynak: kpsv2test.saglik.gov.tr **Servis Bilgileri** sayfası. Tüm metotlar `KpsResult<T>` döner; aşağıdaki ağaçlar `Data` içindeki alanlardır (her düğümdeki `HataBilgisi` gösterilmemiştir).
 
-Tüm metotlar `Task<KpsResult<T>>` döner: `Data` (T), `Error` (üst seviye HataBilgisi), `InnerErrors` (iç düğümlerdeki HataBilgisi'ler), `IsSuccess`. Ağaçlarda her düğümde bulunan `HataBilgisi { Kod, Aciklama }` alanı kısalık için gösterilmemiştir.
-
-**Test kullanıcısı** sütunu, kpsv2test'te herkese açık test kullanıcılarının (`test_user`, `test_user2`) o metoda yetkisi olup olmadığını gösterir (24.11.2026). Kendi kurumunuzun yetkileri için `YetkiListesiAsync()`.
+"Test kullanıcısı" sütunu, test ortamındaki herkese açık kullanıcının o metoda yetkisi olup olmadığını gösterir. Kendi kurumunuzun yetkileri için `YetkiListesiAsync()`.
 
 ## Özet
 

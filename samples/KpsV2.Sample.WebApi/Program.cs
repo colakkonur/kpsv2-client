@@ -4,7 +4,7 @@
 //   curl -s localhost:5080/kps/person -H 'Content-Type: application/json' -d '{"identityNumber":10774881040}'
 //
 // Bu örnek yalnızca Test ortamına, herkese açık test kullanıcısıyla bağlanır (appsettings*.json).
-// Kendi projenizde aynı "Kps" bölümüne kendi Prod bilgilerinizi girersiniz; bkz. docs/entegrasyon-kilavuzu.md.
+// Kendi projenizde aynı "Kps" bölümüne kendi Prod bilgilerinizi girersiniz; bkz. docs/kullanim.md.
 
 using KpsV2;
 using KpsV2.Contracts;

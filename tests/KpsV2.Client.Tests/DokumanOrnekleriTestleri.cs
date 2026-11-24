@@ -3,7 +3,7 @@ using KpsV2.Contracts;
 namespace KpsV2.Client.Tests;
 
 /// <summary>
-/// docs/kullanim.md ve docs/entegrasyon-kilavuzu.md içindeki kod örneklerinin birebir kopyası: API değişip doküman eskirse derleme kırılır.
+/// docs/kullanim.md içindeki kod örneklerinin birebir kopyası: API değişip doküman eskirse derleme kırılır.
 /// Sahte sunucu boş cevap döndüğü için yalnızca derlenme ve akış (istisna fırlatmama) kontrol edilir.
 /// </summary>
 public class DokumanOrnekleriTestleri
