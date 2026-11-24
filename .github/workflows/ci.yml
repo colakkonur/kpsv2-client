@@ -23,7 +23,7 @@ jobs:
       - name: Sürüm kontrolü
         if: github.event_name == 'pull_request'
         run: |
-          git fetch --depth=1 origin "$GITHUB_BASE_REF"
+          git fetch --depth=1 origin "+refs/heads/$GITHUB_BASE_REF:refs/remotes/origin/$GITHUB_BASE_REF"
           if git diff --quiet "origin/$GITHUB_BASE_REF" -- src/KpsV2.Client; then
             echo "Paket kodu değişmedi; yayın olmayacak."
             exit 0
