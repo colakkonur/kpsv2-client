@@ -1,17 +1,37 @@
-# Her push ve pull request'te derler ve birim testlerini çalıştırır.
+# Her PR'da ve main'e her merge'de derler ve testleri çalıştırır.
+# PR'da paket kodu (src/KpsV2.Client) değiştiyse csproj'daki <Version>'ın artırıldığını kontrol eder.
 name: CI
 
 on:
+  pull_request:
   push:
     branches: [main]
-  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
-      - run: dotnet test KpsV2.sln -c Release
+
+      - name: Test
+        run: dotnet test KpsV2.sln -c Release
+
+      - name: Sürüm kontrolü
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --depth=1 origin "$GITHUB_BASE_REF"
+          if git diff --quiet "origin/$GITHUB_BASE_REF" -- src/KpsV2.Client; then
+            echo "Paket kodu değişmedi; yayın olmayacak."
+            exit 0
+          fi
+          eski=$(git show "origin/$GITHUB_BASE_REF:src/KpsV2.Client/KpsV2.Client.csproj" | grep -oP '(?<=<Version>)[^<]+')
+          yeni=$(grep -oP '(?<=<Version>)[^<]+' src/KpsV2.Client/KpsV2.Client.csproj)
+          if [ "$eski" = "$yeni" ]; then
+            echo "::error::Paket kodu değişti ama sürüm artırılmadı. src/KpsV2.Client/KpsV2.Client.csproj içindeki <Version>'ı artırın (şu an $eski)."
+            exit 1
+          fi
+          echo "Merge olunca yayınlanacak sürüm: $eski -> $yeni"

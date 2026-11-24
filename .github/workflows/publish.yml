@@ -1,16 +1,18 @@
-# Yeni sürüm: git tag v2.0.2 && git push origin v2.0.2
-# Paketi test eder, nuget.org'a yayınlar ve GitHub'da sürüm notlarıyla bir Release oluşturur.
-# Paket yalnızca nuget.org'dan dağıtılır.
-# Sürüm numarası etiketten alınır (v2.0.2 -> 2.0.2).
+# main'e merge olunca çalışır. csproj'daki <Version> henüz yayınlanmadıysa:
+# testleri çalıştırır, paketi nuget.org'a yayınlar ve GitHub'da etiketli bir Release oluşturur.
+# Sürüm zaten yayınlanmışsa (ör. yalnızca doküman değiştiyse) hiçbir şey yapmaz.
 # nuget.org girişi API anahtarsız yapılır (Trusted Publishing); bu dosyanın adı nuget.org'daki politikayla aynı olmalı.
 name: Publish
 
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+    paths: ['src/KpsV2.Client/**']
+
+concurrency: publish
 
 permissions:
-  contents: write   # GitHub Release
+  contents: write   # etiket + GitHub Release
   id-token: write   # nuget.org Trusted Publishing
 
 jobs:
@@ -18,26 +20,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Sürüm
+        id: surum
+        run: |
+          v=$(grep -oP '(?<=<Version>)[^<]+' src/KpsV2.Client/KpsV2.Client.csproj)
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "v$v" >/dev/null; then
+            echo "v$v zaten yayınlanmış; yeni sürüm yok."
+            echo "yeni=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Yayınlanacak: v$v"
+            echo "yeni=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-dotnet@v4
+        if: steps.surum.outputs.yeni == 'true'
         with:
           dotnet-version: 10.0.x
 
-      - name: Test
-        run: dotnet test KpsV2.sln -c Release
-
-      - name: Pack
-        run: dotnet pack src/KpsV2.Client -c Release -o nupkg -p:Version=${GITHUB_REF_NAME#v}
+      - name: Test ve paket
+        if: steps.surum.outputs.yeni == 'true'
+        run: |
+          dotnet test KpsV2.sln -c Release
+          dotnet pack src/KpsV2.Client -c Release -o nupkg
 
       - name: nuget.org login
+        if: steps.surum.outputs.yeni == 'true'
         id: login
         uses: NuGet/login@v1
         with:
           user: colakkonur
 
-      - name: Push to nuget.org
+      - name: nuget.org'a yayınla
+        if: steps.surum.outputs.yeni == 'true'
         run: dotnet nuget push nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
 
-      - name: GitHub Release
+      - name: Etiket ve Release
+        if: steps.surum.outputs.yeni == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes
+        run: gh release create "v${{ steps.surum.outputs.version }}" --target "$GITHUB_SHA" --title "v${{ steps.surum.outputs.version }}" --generate-notes

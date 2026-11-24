@@ -43,16 +43,16 @@ dotnet run --project tools/KpsV2.ProdCheck        # 18 metodu birer kez dener, k
 
 KPS'ye IP'si tanımlı bir makinede çalıştırın.
 
-## Yeni sürüm yayınlama
+## Değişiklik ve yayın süreci
 
-```bash
-git tag v2.0.2
-git push origin v2.0.2
-```
+`main`'e doğrudan commit atılamaz; her değişiklik bir PR ile gelir.
 
-GitHub Actions (`.github/workflows/publish.yml`) testleri çalıştırır, paketi nuget.org'a yayınlar ve sürüm notlarıyla bir GitHub Release oluşturur. Sürüm numarası etiketten alınır. nuget.org'a giriş API anahtarı olmadan yapılır (nuget.org'daki `kpsv2-client-policy` Trusted Publishing politikası); `publish.yml` dosyasının adı değişirse bu politika da güncellenmelidir. nuget.org yeni sürümü birkaç dakika içinde listeler.
+1. Bir dal açın, değişikliği yapın, PR açın.
+2. Paket kodunu (`src/KpsV2.Client`) değiştirdiyseniz `KpsV2.Client.csproj` içindeki `<Version>`'ı artırın (ör. `2.0.1` → `2.0.2`). Artırmazsanız CI PR'ı durdurur. Yalnızca doküman veya test değişiyorsa sürüme dokunmayın.
+3. PR'ın merge edilebilmesi için: CI testleri geçmeli ve **@colakkonur** onaylamalı.
+4. Merge olunca `publish.yml` kendiliğinden çalışır: yeni sürümü nuget.org'a yayınlar, `v<sürüm>` etiketiyle bir GitHub Release oluşturur. nuget.org sürümü birkaç dakika içinde listeler.
 
-Paket yalnızca nuget.org'dan dağıtılır.
+nuget.org'a giriş API anahtarı olmadan yapılır (nuget.org'daki `kpsv2-client-policy` Trusted Publishing politikası); `publish.yml` dosyasının adı değişirse bu politika da güncellenmelidir. Paket yalnızca nuget.org'dan dağıtılır.
 
 ## KPS WSDL'i değişirse
 
