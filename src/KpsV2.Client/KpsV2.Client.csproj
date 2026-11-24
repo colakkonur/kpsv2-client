@@ -14,7 +14,8 @@
     <!-- NuGet paketi -->
     <PackageId>KpsV2.Client</PackageId>
     <Version>2.0.0</Version>
-    <Description>Sağlık Bakanlığı Kimlik Paylaşım Sistemi (KPS v2) istemcisi. Kps servisinin 16 ve Parametre servisinin 2 metodu, WSDL'den üretilmiş tipli istek/cevaplarla. STS token önbelleği, geçici hatalarda yeniden deneme, hata sınıflandırması ve ASP.NET Core DI desteği içerir.</Description>
+    <Authors>colakkonur</Authors>
+    <Description>Sağlık Bakanlığı Kimlik Paylaşım Sistemi (KPS v2) için resmî olmayan .NET istemcisi (Bakanlıkla bağlantısı yoktur; kullanmak için kendi KPS hesabınız gerekir). Kps servisinin 16 ve Parametre servisinin 2 metodu, WSDL'den üretilmiş tipli istek/cevaplarla. STS token önbelleği, geçici hatalarda yeniden deneme, hata sınıflandırması ve ASP.NET Core DI desteği içerir.</Description>
     <PackageTags>kps;kpsv2;saglik;kimlik;mernis;soap</PackageTags>
     <RepositoryUrl>https://github.com/colakkonur/kpsv2-client</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

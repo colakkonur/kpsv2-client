@@ -4,6 +4,8 @@ Sağlık Bakanlığı **Kimlik Paylaşım Sistemi (KPS v2)** için .NET istemcis
 
 Bu dosya aynı zamanda NuGet paketinin README'sidir.
 
+> **Resmî paket değildir.** Bu paket Sağlık Bakanlığı tarafından yayınlanmamıştır ve Bakanlıkla bağlantısı yoktur. KPS'yi kullanmak için kurumunuzun KPS Yönetim Sistemi'nden aldığı kendi kullanıcı adı, şifre, kurum kodu ve uygulama kodunu girmeniz gerekir.
+
 ## Özellikler
 
 - **Kps servisinin 16 ve Parametre servisinin 2 metodu**, WSDL'den üretilmiş tiplerle (`KpsV2.Contracts`). İstekler tipli kriterlerle gönderilir; cevaplar hiçbir alan kaybolmadan tipli nesnelere dönüşür.

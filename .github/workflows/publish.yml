@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write    # GitHub Release oluşturmak için
   packages: write    # GitHub Packages'a yayınlamak için
+  id-token: write    # nuget.org Trusted Publishing (OIDC) için
 
 jobs:
   publish:
@@ -38,6 +39,25 @@ jobs:
           dotnet nuget push "nupkg/*.nupkg"
           --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
           --api-key "${{ secrets.GITHUB_TOKEN }}"
+          --skip-duplicate
+
+      # nuget.org: Trusted Publishing ile kalıcı API anahtarı olmadan yayın.
+      # Kurulum: nuget.org'da bu repo + publish.yml için Trusted Publishing politikası tanımlanır ve
+      # repo'da NUGET_USER değişkeni (Settings → Secrets and variables → Actions → Variables) nuget.org kullanıcı adıyla doldurulur.
+      # NUGET_USER tanımlı değilse bu adımlar atlanır.
+      - name: NuGet login (OIDC)
+        if: vars.NUGET_USER != ''
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Push to nuget.org
+        if: vars.NUGET_USER != ''
+        run: >
+          dotnet nuget push "nupkg/*.nupkg"
+          --source "https://api.nuget.org/v3/index.json"
+          --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
           --skip-duplicate
 
       - name: GitHub Release

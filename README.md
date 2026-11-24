@@ -12,3 +12,5 @@ var result = await kps.BilesikKisiSorgulaAsync(identityNumber);
 ```
 
 Tüm dokümanlar [`docs/`](docs/README.md) klasöründedir.
+
+> Resmî paket değildir; Sağlık Bakanlığı ile bağlantısı yoktur. Kullanmak için kendi KPS hesap bilgileriniz gerekir.
