@@ -1,0 +1,63 @@
+<TcKimlikNoSorgulaResponse xmlns="https://www.saglik.gov.tr/KPS/01/01/2017">
+  <TcKimlikNoSorgulaResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <HataBilgisi i:nil="true" />
+    <Sonuc>
+      <AnneTCKimlikNo>13440108786</AnneTCKimlikNo>
+      <BabaTCKimlikNo>10774881040</BabaTCKimlikNo>
+      <DogumYerKod i:nil="true" />
+      <DurumBilgisi>
+        <Din i:nil="true" />
+        <Durum>
+          <Aciklama>Ölüm</Aciklama>
+          <Kod>3</Kod>
+        </Durum>
+        <MedeniHal>
+          <Aciklama>Bekâr</Aciklama>
+          <Kod>1</Kod>
+        </MedeniHal>
+        <OlumTarih>
+          <Ay>13</Ay>
+          <Gun>33</Gun>
+          <Yil>2017</Yil>
+        </OlumTarih>
+      </DurumBilgisi>
+      <HataBilgisi i:nil="true" />
+      <KayitYeriBilgisi>
+        <AileSiraNo>90</AileSiraNo>
+        <BireySiraNo>6</BireySiraNo>
+        <Cilt>
+          <Aciklama>HACIVELİ</Aciklama>
+          <Kod>4</Kod>
+        </Cilt>
+        <Il>
+          <Aciklama>Kastamonu</Aciklama>
+          <Kod>37</Kod>
+        </Il>
+        <Ilce>
+          <Aciklama>Abana</Aciklama>
+          <Kod>1101</Kod>
+        </Ilce>
+      </KayitYeriBilgisi>
+      <OncekiYabanciKimlikNo i:nil="true" />
+      <TCKimlikNo>26563360832</TCKimlikNo>
+      <TemelBilgisi>
+        <Ad>YEŞİM</Ad>
+        <AnneAd>GÜZİDE</AnneAd>
+        <BabaAd>İZZET</BabaAd>
+        <Cinsiyet>
+          <Aciklama>Kadın</Aciklama>
+          <Kod>2</Kod>
+        </Cinsiyet>
+        <DogumTarih>
+          <Ay>3</Ay>
+          <Gun>8</Gun>
+          <Yil>1976</Yil>
+        </DogumTarih>
+        <DogumYer>ADANA</DogumYer>
+        <Soyad>YELBAY</Soyad>
+      </TemelBilgisi>
+      <VeliVasiTur i:nil="true" />
+      <VeliVasiVar i:nil="true" />
+    </Sonuc>
+  </TcKimlikNoSorgulaResult>
+</TcKimlikNoSorgulaResponse>

@@ -1,0 +1,12 @@
+<BilesikKisiSorgulaResponse xmlns="https://www.saglik.gov.tr/KPS/01/01/2017">
+  <BilesikKisiSorgulaResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <HataBilgisi i:nil="true" />
+    <Sonuc>
+      <HataBilgisi i:nil="true" />
+      <KimlikNo>10000000146</KimlikNo>
+      <MaviKartliKisiKutukleri i:nil="true" />
+      <TCVatandasiKisiKutukleri i:nil="true" />
+      <YabanciKisiKutukleri i:nil="true" />
+    </Sonuc>
+  </BilesikKisiSorgulaResult>
+</BilesikKisiSorgulaResponse>

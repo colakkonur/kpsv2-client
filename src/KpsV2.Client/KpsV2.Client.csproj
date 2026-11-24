@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- net7.0: .NET 7, 8, 9, 10... projelerinin hepsine eklenebilir. -->
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>KpsV2</RootNamespace>
+    <!-- net7.0 destek dışı uyarısını bastır: hedef bilinçli olarak tüketici projelerle uyum için seçildi. -->
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- NuGet paketi -->
+    <PackageId>KpsV2.Client</PackageId>
+    <Version>2.0.0</Version>
+    <Description>Sağlık Bakanlığı Kimlik Paylaşım Sistemi (KPS v2) istemcisi. Kps servisinin 16 ve Parametre servisinin 2 metodu, WSDL'den üretilmiş tipli istek/cevaplarla. STS token önbelleği, geçici hatalarda yeniden deneme, hata sınıflandırması ve ASP.NET Core DI desteği içerir.</Description>
+    <PackageTags>kps;kpsv2;saglik;kimlik;mernis;soap</PackageTags>
+    <RepositoryUrl>https://github.com/colakkonur/kpsv2-client</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/colakkonur/kpsv2-client</PackageProjectUrl>
+    <PackageReleaseNotes>2.0.0: Tüm Kps (16) ve Parametre (2) metotları WSDL tipleriyle; KpsSonuc.IcHatalar; KpsException.Tur ve yeniden deneme; alan bazlı yetki listesi; KisiOzeti.</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- NuGet README: tek kaynak docs/kullanim.md -->
+    <None Include="..\..\docs\kullanim.md" Pack="true" PackagePath="\README.md" Link="docs\kullanim.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- En düşük sürümler: tüketici projedeki daha yeni sürümler otomatik seçilir. -->
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="KpsV2.Client.Tests" />
+  </ItemGroup>
+
+</Project>

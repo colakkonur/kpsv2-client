@@ -1,0 +1,6 @@
+<KimlikNoIleYerlesimYeriSorgulaResponse xmlns="https://www.saglik.gov.tr/KPS/01/01/2017">
+  <KimlikNoIleYerlesimYeriSorgulaResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <HataBilgisi i:nil="true" />
+    <Sonuc i:nil="true" />
+  </KimlikNoIleYerlesimYeriSorgulaResult>
+</KimlikNoIleYerlesimYeriSorgulaResponse>

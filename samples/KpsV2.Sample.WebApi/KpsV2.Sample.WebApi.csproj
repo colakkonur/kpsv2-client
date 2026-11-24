@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Gerçek projelerde: <PackageReference Include="KpsV2.Client" Version="2.0.0" /> -->
+    <ProjectReference Include="..\..\src\KpsV2.Client\KpsV2.Client.csproj" />
+  </ItemGroup>
+
+</Project>

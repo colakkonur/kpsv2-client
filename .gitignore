@@ -1,0 +1,12 @@
+bin/
+obj/
+.idea/
+.vs/
+.DS_Store
+*.user
+
+# Prod KPS bilgileri (şifre içerir) — asla depoya girmez. Yalnızca kökteki dosya; samples/ altındakiler hariç.
+/appsettings.json
+
+# Üretilen paketler: GitHub Actions üretir ve yayınlar
+nupkg/

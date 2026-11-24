@@ -1,0 +1,21 @@
+<TcKimlikNoSorgulaResponse xmlns="https://www.saglik.gov.tr/KPS/01/01/2017">
+  <TcKimlikNoSorgulaResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <HataBilgisi i:nil="true" />
+    <Sonuc>
+      <AnneTCKimlikNo i:nil="true" />
+      <BabaTCKimlikNo i:nil="true" />
+      <DogumYerKod i:nil="true" />
+      <DurumBilgisi i:nil="true" />
+      <HataBilgisi>
+        <Aciklama>Aradığınız kriterlere uygun kayıt bulunamadı.</Aciklama>
+        <Kod>2</Kod>
+      </HataBilgisi>
+      <KayitYeriBilgisi i:nil="true" />
+      <OncekiYabanciKimlikNo i:nil="true" />
+      <TCKimlikNo i:nil="true" />
+      <TemelBilgisi i:nil="true" />
+      <VeliVasiTur i:nil="true" />
+      <VeliVasiVar i:nil="true" />
+    </Sonuc>
+  </TcKimlikNoSorgulaResult>
+</TcKimlikNoSorgulaResponse>

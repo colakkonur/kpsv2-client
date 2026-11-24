@@ -1,0 +1,80 @@
+<KimlikNoIleYerlesimYeriSorgulaResponse xmlns="https://www.saglik.gov.tr/KPS/01/01/2017">
+  <KimlikNoIleYerlesimYeriSorgulaResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <HataBilgisi i:nil="true" />
+    <Sonuc>
+      <HataBilgisi i:nil="true" />
+      <TumAdresBilgileri>
+        <KisiAdresBilgisi>
+          <AcikAdres i:nil="true" />
+          <AdresNo i:nil="true" />
+          <AdresTip i:nil="true" />
+          <BeldeAdresi i:nil="true" />
+          <BeyanTarihi>
+            <Ay i:nil="true" />
+            <Gun i:nil="true" />
+            <Yil i:nil="true" />
+          </BeyanTarihi>
+          <BeyandaBulunanKimlikNo i:nil="true" />
+          <HataBilgisi>
+            <Aciklama>KayitBulunamadi</Aciklama>
+            <Kod>2</Kod>
+          </HataBilgisi>
+          <IlIlceMerkezAdresi i:nil="true" />
+          <KoyAdresi i:nil="true" />
+          <TasinmaTarihi>
+            <Ay i:nil="true" />
+            <Gun i:nil="true" />
+            <Yil i:nil="true" />
+          </TasinmaTarihi>
+          <TescilTarihi>
+            <Ay i:nil="true" />
+            <Gun i:nil="true" />
+            <Yil i:nil="true" />
+          </TescilTarihi>
+          <YurtDisiAdresi i:nil="true" />
+        </KisiAdresBilgisi>
+      </TumAdresBilgileri>
+      <YerlesimYeriAdresi>
+        <AcikAdres>st.45 KÖLN / ALMANYA FEDERAL CUMHURIYETI</AcikAdres>
+        <AdresNo>0</AdresNo>
+        <AdresTip>
+          <Aciklama>Yurt Dışı Adresi</Aciklama>
+          <Kod>4</Kod>
+        </AdresTip>
+        <BeldeAdresi i:nil="true" />
+        <BeyanTarihi>
+          <Ay i:nil="true" />
+          <Gun i:nil="true" />
+          <Yil i:nil="true" />
+        </BeyanTarihi>
+        <BeyandaBulunanKimlikNo i:nil="true" />
+        <HataBilgisi i:nil="true" />
+        <IlIlceMerkezAdresi i:nil="true" />
+        <KoyAdresi i:nil="true" />
+        <TasinmaTarihi>
+          <Ay i:nil="true" />
+          <Gun i:nil="true" />
+          <Yil i:nil="true" />
+        </TasinmaTarihi>
+        <TescilTarihi>
+          <Ay i:nil="true" />
+          <Gun i:nil="true" />
+          <Yil i:nil="true" />
+        </TescilTarihi>
+        <YurtDisiAdresi>
+          <DisTemsDuzeltmeBeyanTarih i:nil="true" />
+          <DisTemsDuzeltmeKararTarih i:nil="true" />
+          <DisTemsDuzeltmeNeden i:nil="true" />
+          <DisTemsilcilik i:nil="true" />
+          <HataBilgisi i:nil="true" />
+          <YabanciAdres>st.45</YabanciAdres>
+          <YabanciSehir>KÖLN</YabanciSehir>
+          <YabanciUlke>
+            <Aciklama>ALMANYA FEDERAL CUMHURIYETI</Aciklama>
+            <Kod>9893</Kod>
+          </YabanciUlke>
+        </YurtDisiAdresi>
+      </YerlesimYeriAdresi>
+    </Sonuc>
+  </KimlikNoIleYerlesimYeriSorgulaResult>
+</KimlikNoIleYerlesimYeriSorgulaResponse>
