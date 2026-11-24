@@ -18,42 +18,19 @@ Merkez teşkilat uygulamaları (uygulama kullanıcısı) kurum ve uygulama kodu 
 
 ## Adım 1 – Paketi projeye ekleyin
 
-Paket **GitHub Packages** üzerinden dağıtılır: `https://nuget.pkg.github.com/colakkonur/index.json`. Kaynak kod: https://github.com/colakkonur/kpsv2-client
+Paket nuget.org'da yayınlanır: https://www.nuget.org/packages/KpsV2.Client. Ek bir paket kaynağı veya token gerekmez:
 
-GitHub Packages, paket indirmek için de GitHub girişi ister (paket public olsa bile). Bu yüzden bir kez token tanımlanır:
+```bash
+dotnet add package KpsV2.Client
+```
 
-1. GitHub'da **Settings → Developer settings → Personal access tokens (classic)** altında yalnızca `read:packages` yetkisiyle bir token oluşturun.
-2. Projenizin kök klasörüne `nuget.config` ekleyin:
+`.csproj` içinde şu satırın oluştuğunu kontrol edin:
 
-   ```xml
-   <?xml version="1.0" encoding="utf-8"?>
-   <configuration>
-     <packageSources>
-       <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
-       <add key="kpsv2" value="https://nuget.pkg.github.com/colakkonur/index.json" />
-     </packageSources>
-     <packageSourceCredentials>
-       <kpsv2>
-         <add key="Username" value="%GITHUB_USERNAME%" />
-         <add key="ClearTextPassword" value="%GITHUB_PACKAGES_TOKEN%" />
-       </kpsv2>
-     </packageSourceCredentials>
-   </configuration>
-   ```
+```xml
+<PackageReference Include="KpsV2.Client" Version="2.0.1" />
+```
 
-   Token dosyaya yazılmaz; `GITHUB_USERNAME` ve `GITHUB_PACKAGES_TOKEN` ortam değişkenlerinden okunur. Böylece `nuget.config` depoya güvenle eklenir. CI'da (GitHub Actions) bu değişkenler secret olarak tanımlanır.
-3. Paketi ekleyin:
-
-   ```bash
-   dotnet add package KpsV2.Client
-   ```
-4. `.csproj` içinde şu satırın oluştuğunu kontrol edin:
-
-   ```xml
-   <PackageReference Include="KpsV2.Client" Version="2.0.0" />
-   ```
-
-Sürümler ve değişiklik notları: repo'nun **Releases** sayfası. Her sürümün `.nupkg` dosyası orada da bulunur; GitHub girişi olmadan yerel bir klasörden kullanmak isterseniz oradan indirip `dotnet nuget add source <klasör>` ile ekleyebilirsiniz.
+Kaynak kod ve sürüm notları: https://github.com/colakkonur/kpsv2-client (Releases sayfası). Aynı paket GitHub Packages'ta da yayınlanır (`https://nuget.pkg.github.com/colakkonur/index.json`), ancak oradan indirmek için `read:packages` yetkili bir GitHub token'ı gerekir; normal kullanımda nuget.org yeterlidir.
 
 ## Adım 2 – Ayarları projenin appsettings.json dosyasına ekleyin
 

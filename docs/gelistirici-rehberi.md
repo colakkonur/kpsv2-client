@@ -133,7 +133,7 @@ Kaynak kod GitHub'da: https://github.com/colakkonur/kpsv2-client. İki GitHub Ac
 | İş akışı | Ne zaman | Ne yapar |
 | --- | --- | --- |
 | `.github/workflows/ci.yml` | `main`'e her push ve her pull request | Derleme, birim testleri, paketleme denemesi |
-| `.github/workflows/publish.yml` | `v*` etiketi atıldığında | Derleme, test, paketleme; paketi **GitHub Packages**'a yayınlar ve `.nupkg` dosyalarıyla bir GitHub Release oluşturur |
+| `.github/workflows/publish.yml` | `v*` etiketi atıldığında | Derleme, test, paketleme; paketi **nuget.org** ve **GitHub Packages**'a yayınlar, `.nupkg` dosyalarıyla bir GitHub Release oluşturur |
 
 Yeni sürüm çıkarmak:
 
@@ -143,7 +143,13 @@ git tag v2.0.1
 git push origin v2.0.1
 ```
 
-Paket sürümü etiketten alınır (`v2.0.1` → `2.0.1`). Yayın, Actions'ın kendi `GITHUB_TOKEN`'ı ile yapılır; ek bir secret gerekmez. Paketin NuGet README'si `docs/kullanim.md` dosyasıdır; pack sırasında pakete kopyalanır.
+Paket sürümü etiketten alınır (`v2.0.1` → `2.0.1`); csproj'daki `<Version>`'ı da aynı tutun. Aynı sürüm numarası ikinci kez yayınlanamaz.
+
+Yayında hiçbir kalıcı anahtar kullanılmaz:
+- **nuget.org:** Trusted Publishing (OIDC). nuget.org'da `colakkonur` hesabında `kpsv2-client-policy` politikası tanımlıdır (repo `colakkonur/kpsv2-client`, iş akışı `publish.yml`, paketler `KpsV2.*`). Repo'daki `NUGET_USER` değişkeni (`colakkonur`) bu adımı açar; değişken silinirse nuget.org adımı atlanır. İş akışı dosyasının adı değişirse politikanın da güncellenmesi gerekir.
+- **GitHub Packages:** Actions'ın kendi `GITHUB_TOKEN`'ı.
+
+nuget.org yeni sürümü doğrulayıp listelemeden önce birkaç dakika (ilk yayında ~7 dk) bekletir. Paketin NuGet README'si `docs/kullanim.md` dosyasıdır; pack sırasında pakete kopyalanır.
 
 Yerelde paket üretmek için (yayınlamadan): `dotnet pack src/KpsV2.Client -c Release -o nupkg`. `nupkg/` klasörü depoya girmez.
 
