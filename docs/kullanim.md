@@ -2,7 +2,9 @@
 
 Sağlık Bakanlığı **Kimlik Paylaşım Sistemi (KPS v2)** için .NET istemcisi. Kps servisinin 16 ve Parametre servisinin 2 metodunu tipli istek/cevaplarla sunar; token, yeniden deneme ve hata yönetimi paketin içindedir.
 
-> **Resmî paket değildir.** Sağlık Bakanlığı ile bağlantısı yoktur. Kullanmak için kurumunuzun KPS hesap bilgileri gerekir.
+Aynı paket, ayrı bir sistem olan **NVİ Kimlik Paylaşımı Sistemi**'ni de destekler (TC kimlik no doğrulama ve kişi sorgulama): [8. NVİ KPS](#8-nvi-kps).
+
+> **Resmî paket değildir.** Sağlık Bakanlığı veya NVİ ile bağlantısı yoktur. Kullanmak için kurumunuzun KPS hesap bilgileri gerekir.
 
 ## 1. Kurulum
 
@@ -159,3 +161,59 @@ Prod'a geçmeden önce:
 - [ ] Şifre içeren dosya depoya gönderilmiyor
 - [ ] Sunucunun çıkış IP'si KPS'ye tanımlı
 - [ ] `YetkiListesiAsync()` ile kullanılacak metotların yetkisi görüldü
+
+## 8. NVİ KPS
+
+NVİ (Nüfus ve Vatandaşlık İşleri Genel Müdürlüğü) KPS, Sağlık Bakanlığı KPS'sinden **ayrı bir sistemdir**: başvuru [kpsbasvuru.nvi.gov.tr](https://kpsbasvuru.nvi.gov.tr) üzerinden yapılır, onaylanınca NVİ bir web servis kullanıcı adı, şifre ve yetki verilen servislerin listesini bildirir. Kurum/uygulama kodu yoktur. İki sistem aynı projede birlikte kullanılabilir.
+
+Paketin tipli olarak sunduğu NVİ servisleri:
+
+| NVİ servisi | C# | `Data` tipi |
+|---|---|---|
+| `TCKimlikNoDogrulaServis` | `TCKimlikNoDogrulaAsync(identityNumber, firstName, lastName, birthYear)` | `TCKimlikNoDogrulama` |
+| `KisiSorgulaTCKimlikNoServis` | `KisiSorgulaTCKimlikNoAsync(identityNumber)` | `KisiBilgisi` |
+
+İki metodun da birden çok kişiyi tek istekte sorgulayan liste alan sürümü vardır (`Data` dizi döner). Diğer NVİ servisleri için `CallAsync(servis, işlem, gövdeXml)`.
+
+Ayarlar (`appsettings.json`):
+
+```json
+{
+  "NviKps": {
+    "Username": "<NVİ web servis kullanıcı adı>",
+    "Password": "<NVİ web servis şifresi>"
+  }
+}
+```
+
+İsteğe bağlı alanlar `Kps` bölümündekilerle aynıdır: `Timeout`, `RetryCount`, `RetryDelay`, `ValidateIdentityNumber`. Sunucuda şifreyi `NviKps__Password` ortam değişkeniyle verebilirsiniz.
+
+```csharp
+// Program.cs
+builder.Services.AddNviKpsClient(builder.Configuration.GetSection("NviKps"));
+```
+
+```csharp
+using KpsV2.Nvi;
+
+public class PatientVerificationService(INviKpsClient nvi)
+{
+    public async Task<bool> VerifyAsync(long identityNumber, string firstName, string lastName, int birthYear, CancellationToken ct)
+    {
+        var result = await nvi.TCKimlikNoDogrulaAsync(identityNumber, firstName, lastName, birthYear, ct);
+        return result.IsSuccess;   // eşleşmezse result.Error dolu döner
+    }
+}
+```
+
+```csharp
+var person = (await nvi.KisiSorgulaTCKimlikNoAsync(identityNumber)).Data;
+var name = person?.TemelBilgisi?.Ad;
+var birthDate = person?.TemelBilgisi?.DogumTarih?.Date;    // DateOnly?
+var status = person?.DurumBilgisi?.Durum?.Aciklama;        // Açık, Ölüm...
+```
+
+Sonuç (`KpsResult<T>`) ve hatalar (`KpsException.Kind`) [6. bölümdekiyle](#6-sonuç-ve-hatalar) aynıdır. `Authentication`: NVİ kullanıcı adı veya şifresi hatalı; `Unauthorized`: kurumun bu NVİ servisine yetkisi yok.
+
+- **Test ortamı yoktur.** NVİ herkese açık bir test ortamı sunmaz; sorgu servisine yalnızca başvuruda tanımlı IP'lerden erişilebilir. Bu yüzden NVİ servislerinin cevapları şimdilik NVİ'nin yayınladığı WSDL şemasına göre test edilmiştir; ilk gerçek çağrı depodaki kontrol aracıyla (`tools/KpsV2.ProdCheck`) doğrulanır.
+- Paketin kullandığı WSDL'ler NVİ'nin herkese açık adresindedir: `https://kpsbasvuru.nvi.gov.tr/Services/Wsdl.ashx?Service=<servis adı>`.

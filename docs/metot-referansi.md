@@ -2751,3 +2751,53 @@ Task<KpsResult<Parametre[]>> ParametreDegerleriAsync(string parameterName)
 ```
 
 `ParametreAdListesi` tüm parametre adlarını (ör. kod listeleri) döner; `ParametreDegerleri` verilen parametrenin `Kod`/`Aciklama` değerlerini döner. Test kullanıcılarının bu servise yetkisi yoktur.
+
+## NVİ KPS
+
+NVİ Kimlik Paylaşımı Sistemi'nin servisleri (`INviKpsClient`, ayarlar ve kurulum: [kullanim.md § 8](kullanim.md#8-nvi-kps)). Kaynak: NVİ'nin herkese açık WSDL'leri, `https://kpsbasvuru.nvi.gov.tr/Services/Wsdl.ashx?Service=<servis adı>`. Tipler `KpsV2.Nvi.Contracts` namespace'indedir. Her servisin tek işlemi `ListeleCoklu`'dur: bir kriter listesi alır, kişi başına bir sonuç döner.
+
+| NVİ servisi | C# | Dönüş (`Data`) |
+|---|---|---|
+| [TCKimlikNoDogrulaServis](#tckimliknodogrulaservis) | `TCKimlikNoDogrulaAsync(long identityNumber, string firstName, string lastName, int birthYear)` | `TCKimlikNoDogrulama` |
+| | `TCKimlikNoDogrulaAsync(IEnumerable<TCKimlikNoDogrulaSorguKriteri> criteria)` | `TCKimlikNoDogrulama[]` |
+| [KisiSorgulaTCKimlikNoServis](#kisisorgulatckimliknoservis) | `KisiSorgulaTCKimlikNoAsync(long identityNumber)` | `KisiBilgisi` |
+| | `KisiSorgulaTCKimlikNoAsync(IEnumerable<long> identityNumbers)` | `KisiBilgisi[]` |
+
+Tek kişilik sürümlerde kişinin kendi `HataBilgisi`'si `Error`'a taşınır; liste sürümlerinde her elemanın `HataBilgisi`'sine bakın (`InnerErrors` hepsini yollarıyla verir).
+
+### TCKimlikNoDogrulaServis
+
+Kriter (`TCKimlikNoDogrulaSorguKriteri`): `TCKimlikNo`, `Ad`, `Soyad`, `DogumYil`.
+
+```
+TCKimlikNoDogrulama
+├── TCKimlikNo
+├── Ad
+├── Soyad
+├── DogumYil
+└── HataBilgisi { Kod, Aciklama }
+```
+
+### KisiSorgulaTCKimlikNoServis
+
+Kriter (`KisiSorgulaTCKimlikNoSorguKriteri`): `TCKimlikNo`.
+
+```
+KisiBilgisi
+├── TCKimlikNo, AnneTCKimlikNo, BabaTCKimlikNo, EsTCKimlikNo
+├── DogumYerKod
+├── TemelBilgisi
+│   ├── Ad, Soyad, AnneAd, BabaAd
+│   ├── Cinsiyet { Kod, Aciklama }
+│   ├── DogumTarih { Gun, Ay, Yil }  → .Date (DateOnly?)
+│   └── DogumYer
+├── DurumBilgisi
+│   ├── Durum { Kod, Aciklama }
+│   ├── MedeniHal { Kod, Aciklama }
+│   ├── Din { Kod, Aciklama }
+│   └── OlumTarih { Gun, Ay, Yil }
+├── KayitYeriBilgisi
+│   ├── Il, Ilce, Cilt { Kod, Aciklama }
+│   └── AileSiraNo, BireySiraNo
+└── HataBilgisi { Kod, Aciklama }
+```
