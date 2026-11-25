@@ -51,7 +51,7 @@ public sealed class KpsResult<T> where T : class
 
     private static IReadOnlyList<KpsInnerError> CollectInnerErrors(XElement root)
     {
-        XNamespace ns = KpsClient.KpsNs;
+        var ns = root.Name.Namespace; // Sağlık KPS'si veya NVİ: cevap düğümleri kök ile aynı namespace'tedir
         var list = new List<KpsInnerError>();
         foreach (var h in root.Descendants(ns + "HataBilgisi"))
         {
@@ -76,12 +76,16 @@ public sealed record KpsError(int? Code, string? Description)
     /// <inheritdoc />
     public override string ToString() => Code is null ? Description ?? "" : $"[{Code}] {Description}";
 
-    internal static KpsError? From(Parametre? p) =>
-        p is null || (p.Kod is null && string.IsNullOrEmpty(p.Aciklama)) ? null : new KpsError(p.Kod, p.Aciklama);
+    internal static KpsError? From(Parametre? p) => From(p?.Kod, p?.Aciklama);
+
+    internal static KpsError? From(Nvi.Contracts.Parametre? p) => From(p?.Kod, p?.Aciklama);
+
+    private static KpsError? From(int? code, string? description) =>
+        code is null && string.IsNullOrEmpty(description) ? null : new KpsError(code, description);
 
     internal static KpsError? From(XElement h)
     {
-        XNamespace ns = KpsClient.KpsNs;
+        var ns = h.Name.Namespace;
         if (!h.HasElements) return null;
         var code = int.TryParse(h.Element(ns + "Kod")?.Value, out var k) ? k : (int?)null;
         var description = h.Element(ns + "Aciklama")?.Value;

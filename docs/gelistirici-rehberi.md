@@ -6,11 +6,11 @@ Bu depoyu geliştirenler için. Paketi kullanmak için [kullanim.md](kullanim.md
 
 | Klasör | İçerik |
 | --- | --- |
-| `src/KpsV2.Client` | Paket. `Contracts/KpsContracts.g.cs` KPS WSDL'inden üretilir, elle değiştirilmez |
+| `src/KpsV2.Client` | Paket. `Contracts/KpsContracts.g.cs` (Sağlık KPS) ve `Contracts/NviContracts.g.cs` (NVİ KPS) WSDL'lerden üretilir, elle değiştirilmez. NVİ istemcisi `Nvi/` altında |
 | `tests/KpsV2.Client.Tests` | Testler |
 | `samples/KpsV2.Sample.WebApi` | Örnek ASP.NET Core projesi (Test ortamına bağlanır) |
-| `tools/KpsV2.ProdCheck` | Prod'da 18 metodu birer kez deneyen kontrol aracı |
-| `tools/generate-contracts.sh` | KPS WSDL'i değişirse `KpsContracts.g.cs`'i yeniden üretir |
+| `tools/KpsV2.ProdCheck` | Prod'da Sağlık KPS'nin 18 metodunu ve NVİ KPS'nin 2 servisini birer kez deneyen kontrol aracı |
+| `tools/generate-contracts.sh` | WSDL'ler değişirse `KpsContracts.g.cs` ve `NviContracts.g.cs`'i yeniden üretir |
 | `docs` | Dokümanlar; `kaynaklar/` altında Bakanlığın teknik dokümanı ve test kimlik numaraları |
 
 ## Nasıl çalışır
@@ -20,6 +20,8 @@ Bu depoyu geliştirenler için. Paketi kullanmak için [kullanim.md](kullanim.md
 3. Cevap, WSDL'den üretilen C# tiplerine çevrilir.
 
 KPS'nin kullandığı WCF bağlaması .NET Core'da desteklenmediği için SOAP mesajı elle kurulur (Bakanlığın örnek projesi de böyle yapar).
+
+NVİ KPS (`Nvi/NviKpsClient.cs`) aynı akışı izler, iki farkla: STS'ten simetrik anahtarlı token istenir (kurum/uygulama kodu yoktur) ve her sorguda WS-Security zaman damgası bu anahtarla HMAC-SHA1 olarak imzalanır. Bu, NVİ WSDL'lerindeki güvenlik politikasının gereğidir (TransportBinding + IssuedToken/SymmetricKey). Zaman damgası ve SignedInfo exc-c14n biçiminde yazılır; `NviKpsClientTests` imzayı .NET'in `SignedXml` doğrulayıcısıyla kontrol eder. HTTP gönderimi, hata sınıflandırması, yeniden deneme ve token önbelleği iki istemcide ortaktır (`SoapTransport.cs`).
 
 ## Test
 
@@ -38,10 +40,10 @@ Prod bilgileri yalnızca depo kökündeki `appsettings.json` dosyasına girilir.
 
 ```bash
 cp appsettings.example.json appsettings.json      # doldurun
-dotnet run --project tools/KpsV2.ProdCheck        # 18 metodu birer kez dener, kişisel veri yazdırmaz
+dotnet run --project tools/KpsV2.ProdCheck        # her metodu birer kez dener, kişisel veri yazdırmaz
 ```
 
-KPS'ye IP'si tanımlı bir makinede çalıştırın.
+Araç, `appsettings.json`'da hangi bölüm doluysa (`Kps`, `NviKps`) o sistemi dener. KPS'ye IP'si tanımlı bir makinede çalıştırın. NVİ'nin test ortamı olmadığından NVİ servislerinin gerçek cevap biçimi ilk kez bu araçla görülür; beklenmeyen bir şey çıkarsa (`InvalidResponse`, iş hatası kodları) `NviKpsClientTests`'teki sahte cevapları gerçek cevaba göre güncelleyin (kişisel veri içermeyecek şekilde).
 
 ## Değişiklik ve yayın süreci
 
@@ -61,3 +63,5 @@ tools/generate-contracts.sh && dotnet test
 ```
 
 Yeni bir metot eklendiyse `IKpsClient`, `KpsClient`, `Contracts/KpsContracts.Ekler.cs`, `MetotSozlesmeTestleri.cs` ve `metot-referansi.md` dosyalarını güncelleyin; eksik kalırsa `MetotSozlesmeTestleri` testi kırılır.
+
+**Yeni bir NVİ servisi** (ör. NVİ onay yazısında yetki verilen başka bir servis): adını `tools/generate-contracts.sh` içindeki `NVI_SERVISLER`'e ekleyip betiği çalıştırın, ardından `INviKpsClient` / `NviKpsClient`'a mevcut iki servis gibi bir metot, `NviKpsClientTests`'e test ve `metot-referansi.md`'ye bölüm ekleyin. NVİ'nin servis adını tanımadığı WSDL isteği `<error>Lütfen geçerli bir servis adı belirtiniz!</error>` döner; betik bu durumda durur.

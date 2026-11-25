@@ -1,4 +1,5 @@
 using KpsV2.Contracts;
+using KpsV2.Nvi;
 
 namespace KpsV2.Client.Tests;
 
@@ -52,5 +53,30 @@ public class DokumanOrnekleriTestleri
             _ = (await kps.KimlikNoIleYerlesimYeriSorgulaAsync(10774881040)).GetDataOrThrow().YerlesimYeriAdresi.AcikAdres);
 
         _ = (await kps.YetkiListesiAsync()).Data.FieldPermissions("BilesikKisiSorgula");
+    }
+
+    // ---------------- 8. NVİ KPS ----------------
+
+    private readonly INviKpsClient nvi = SahteNvi.Istemci(new SahteNvi());
+
+    private sealed class PatientVerificationService(INviKpsClient nvi)
+    {
+        public async Task<bool> VerifyAsync(long identityNumber, string firstName, string lastName, int birthYear, CancellationToken ct)
+        {
+            var result = await nvi.TCKimlikNoDogrulaAsync(identityNumber, firstName, lastName, birthYear, ct);
+            return result.IsSuccess;
+        }
+    }
+
+    [Fact]
+    public async Task Nvi_ornekleri()
+    {
+        Assert.False(await new PatientVerificationService(nvi).VerifyAsync(10774881040, "AHMET", "YILMAZ", 1980, default));
+
+        long identityNumber = 10774881040;
+        var person = (await nvi.KisiSorgulaTCKimlikNoAsync(identityNumber)).Data;
+        _ = person?.TemelBilgisi?.Ad;
+        _ = person?.TemelBilgisi?.DogumTarih?.Date;
+        _ = person?.DurumBilgisi?.Durum?.Aciklama;
     }
 }
